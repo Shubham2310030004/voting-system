@@ -4,12 +4,13 @@ import java.sql.*;
 import javax.swing.*;
 
 public class CandidateLogin extends JFrame {
-    private JTextField emailField;
+    private JTextField usernameField;  // Changed from emailField to usernameField
     private JPasswordField passwordField;
+    private JComboBox<String> emailDomainComboBox;
     
     public CandidateLogin() {
         setTitle("Candidate Login");
-        setSize(400, 350);
+        setSize(500, 350);  // Increased width to accommodate the new components
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         initUI();
@@ -27,13 +28,27 @@ public class CandidateLogin extends JFrame {
         JPanel formPanel = new JPanel(new GridLayout(4, 1, 10, 10));
         formPanel.setBackground(new Color(240, 240, 240));
         
-        // Email
+        // Email - Modified to include username, @, and domain dropdown
         JPanel emailPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         emailPanel.setBackground(new Color(240, 240, 240));
         JLabel emailLabel = new JLabel("Email:");
-        emailField = new JTextField(20);
+        
+        // Username part before @
+        usernameField = new JTextField(10);
+        
+        // The @ symbol - constant and not editable
+        JLabel atLabel = new JLabel("@");
+        atLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        
+        // Domain dropdown with popular email providers
+        String[] popularDomains = {"gmail.com", "yahoo.com", "hotmail.com", "outlook.com", "icloud.com"};
+        emailDomainComboBox = new JComboBox<>(popularDomains);
+        emailDomainComboBox.setEditable(true); // Allow custom domains
+        
         emailPanel.add(emailLabel);
-        emailPanel.add(emailField);
+        emailPanel.add(usernameField);
+        emailPanel.add(atLabel);
+        emailPanel.add(emailDomainComboBox);
         
         // Password
         JPanel passwordPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -71,10 +86,12 @@ public class CandidateLogin extends JFrame {
     }
     
     private void performLogin(ActionEvent e) {
-        String email = emailField.getText().trim();
+        String username = usernameField.getText().trim();
+        String domain = (String) emailDomainComboBox.getSelectedItem();
+        String email = username + "@" + domain;  // Combine to form full email
         String password = new String(passwordField.getPassword());
         
-        if (email.isEmpty() || password.isEmpty()) {
+        if (username.isEmpty() || domain.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this, 
                 "Please fill all fields", "Error", JOptionPane.ERROR_MESSAGE);
             return;
