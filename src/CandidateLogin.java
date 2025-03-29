@@ -4,12 +4,13 @@ import java.sql.*;
 import javax.swing.*;
 
 public class CandidateLogin extends JFrame {
-    private JTextField emailField;
+    private JTextField usernameField;
     private JPasswordField passwordField;
+    private JComboBox<String> emailDomainComboBox;
     
     public CandidateLogin() {
         setTitle("Candidate Login");
-        setSize(400, 350);
+        setSize(500, 350);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         initUI();
@@ -24,16 +25,28 @@ public class CandidateLogin extends JFrame {
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         titleLabel.setForeground(new Color(0, 102, 204));
         
-        JPanel formPanel = new JPanel(new GridLayout(4, 1, 10, 10));
+        JPanel formPanel = new JPanel();
+        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setBackground(new Color(240, 240, 240));
         
+        // Email Panel
         JPanel emailPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         emailPanel.setBackground(new Color(240, 240, 240));
         JLabel emailLabel = new JLabel("Email:");
-        emailField = new JTextField(20);
-        emailPanel.add(emailLabel);
-        emailPanel.add(emailField);
+        usernameField = new JTextField(10);
+        JLabel atLabel = new JLabel("@");
+        atLabel.setFont(new Font("Arial", Font.BOLD, 14));
         
+        String[] popularDomains = {"gmail.com", "yahoo.com", "hotmail.com", "outlook.com", "icloud.com"};
+        emailDomainComboBox = new JComboBox<>(popularDomains);
+        emailDomainComboBox.setEditable(true);
+        
+        emailPanel.add(emailLabel);
+        emailPanel.add(usernameField);
+        emailPanel.add(atLabel);
+        emailPanel.add(emailDomainComboBox);
+        
+        // Password Panel
         JPanel passwordPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         passwordPanel.setBackground(new Color(240, 240, 240));
         JLabel passwordLabel = new JLabel("Password:");
@@ -41,24 +54,35 @@ public class CandidateLogin extends JFrame {
         passwordPanel.add(passwordLabel);
         passwordPanel.add(passwordField);
         
+        // Buttons Panel
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setBackground(new Color(240, 240, 240));
+        
         JButton loginBtn = new JButton("Login");
         loginBtn.setFont(new Font("Arial", Font.BOLD, 14));
         loginBtn.setBackground(new Color(0, 102, 204));
         loginBtn.setForeground(Color.WHITE);
+        loginBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         loginBtn.addActionListener(this::performLogin);
         
         JButton registerBtn = new JButton("Not registered? Sign up here");
         registerBtn.setBorderPainted(false);
         registerBtn.setContentAreaFilled(false);
         registerBtn.setForeground(new Color(0, 102, 204));
+        registerBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         registerBtn.addActionListener(e -> {
             new CandidateRegistration().setVisible(true);
             dispose();
         });
         
+        // Add components to form panel
         formPanel.add(emailPanel);
+        formPanel.add(Box.createVerticalStrut(10));
         formPanel.add(passwordPanel);
+        formPanel.add(Box.createVerticalStrut(20));
         formPanel.add(loginBtn);
+        formPanel.add(Box.createVerticalStrut(5));
         formPanel.add(registerBtn);
         
         mainPanel.add(titleLabel, BorderLayout.NORTH);
@@ -67,10 +91,12 @@ public class CandidateLogin extends JFrame {
     }
     
     private void performLogin(ActionEvent e) {
-        String email = emailField.getText().trim();
+        String username = usernameField.getText().trim();
+        String domain = (String) emailDomainComboBox.getSelectedItem();
+        String email = username + "@" + domain;
         String password = new String(passwordField.getPassword());
         
-        if (email.isEmpty() || password.isEmpty()) {
+        if (username.isEmpty() || domain.trim().isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this, 
                 "Please fill all fields", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -107,5 +133,11 @@ public class CandidateLogin extends JFrame {
             JOptionPane.showMessageDialog(this,
                 "Database error", "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new CandidateLogin().setVisible(true);
+        });
     }
 }
