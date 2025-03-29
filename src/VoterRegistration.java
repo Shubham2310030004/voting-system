@@ -1,10 +1,10 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import javax.swing.*;
 
 public class VoterRegistration extends JFrame {
     private JTextField nameField, emailField, dobField, cardNumberField, addressField;
@@ -30,70 +30,61 @@ public class VoterRegistration extends JFrame {
         JPanel formPanel = new JPanel(new GridLayout(9, 1, 5, 5));
         formPanel.setBackground(StyleConstants.SECONDARY_COLOR);
         
-        // Name
         JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         namePanel.setBackground(StyleConstants.SECONDARY_COLOR);
         JLabel nameLabel = new JLabel("Full Name:");
         nameField = new JTextField(20);
         namePanel.add(nameLabel);
         namePanel.add(nameField);
-        
-        // Email
+
         JPanel emailPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         emailPanel.setBackground(StyleConstants.SECONDARY_COLOR);
         JLabel emailLabel = new JLabel("Email:");
         emailField = new JTextField(20);
         emailPanel.add(emailLabel);
         emailPanel.add(emailField);
-        
-        // Password
+
         JPanel passwordPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         passwordPanel.setBackground(StyleConstants.SECONDARY_COLOR);
         JLabel passwordLabel = new JLabel("Password:");
         passwordField = new JPasswordField(20);
         passwordPanel.add(passwordLabel);
         passwordPanel.add(passwordField);
-        
-        // Confirm Password
+
         JPanel confirmPasswordPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         confirmPasswordPanel.setBackground(StyleConstants.SECONDARY_COLOR);
         JLabel confirmPasswordLabel = new JLabel("Confirm Password:");
         confirmPasswordField = new JPasswordField(20);
         confirmPasswordPanel.add(confirmPasswordLabel);
         confirmPasswordPanel.add(confirmPasswordField);
-        
-        // Date of Birth
+
         JPanel dobPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         dobPanel.setBackground(StyleConstants.SECONDARY_COLOR);
         JLabel dobLabel = new JLabel("Date of Birth (YYYY-MM-DD):");
         dobField = new JTextField(20);
         dobPanel.add(dobLabel);
         dobPanel.add(dobField);
-        
-        // Voter Card Number
+
         JPanel cardNumberPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         cardNumberPanel.setBackground(StyleConstants.SECONDARY_COLOR);
         JLabel cardNumberLabel = new JLabel("Voter Card Number:");
         cardNumberField = new JTextField(20);
         cardNumberPanel.add(cardNumberLabel);
         cardNumberPanel.add(cardNumberField);
-        
-        // Address
+
         JPanel addressPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         addressPanel.setBackground(StyleConstants.SECONDARY_COLOR);
         JLabel addressLabel = new JLabel("Address:");
         addressField = new JTextField(20);
         addressPanel.add(addressLabel);
         addressPanel.add(addressField);
-        
-        // Register Button
+
         JButton registerBtn = new JButton("Register");
         registerBtn.setFont(StyleConstants.BUTTON_FONT);
         registerBtn.setBackground(StyleConstants.PRIMARY_COLOR);
         registerBtn.setForeground(Color.WHITE);
         registerBtn.addActionListener(this::registerVoter);
-        
-        // Back Button
+
         JButton backBtn = new JButton("Back to Login");
         backBtn.addActionListener(e -> {
             new VoterLogin().setVisible(true);
@@ -123,8 +114,7 @@ public class VoterRegistration extends JFrame {
         String dobStr = dobField.getText().trim();
         String cardNumber = cardNumberField.getText().trim();
         String address = addressField.getText().trim();
-        
-        // Validation
+
         if (name.isEmpty() || email.isEmpty() || password.isEmpty() || 
             confirmPassword.isEmpty() || dobStr.isEmpty() || cardNumber.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please fill all required fields", "Error", JOptionPane.ERROR_MESSAGE);
@@ -152,13 +142,10 @@ public class VoterRegistration extends JFrame {
             JOptionPane.showMessageDialog(this, "Invalid date format. Use YYYY-MM-DD", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
-        // Hash password
+
         String hashedPassword = PasswordUtils.createPasswordHash(password);
-        
-        // Save to database
+
         try (Connection conn = DatabaseConnection.getConnection()) {
-            // Check if email already exists
             String checkSql = "SELECT email FROM voters WHERE email = ?";
             PreparedStatement checkStmt = conn.prepareStatement(checkSql);
             checkStmt.setString(1, email);
@@ -168,8 +155,6 @@ public class VoterRegistration extends JFrame {
                 JOptionPane.showMessageDialog(this, "Email already registered", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
-            // Check if voter card number exists
             checkSql = "SELECT voter_card_number FROM voters WHERE voter_card_number = ?";
             checkStmt = conn.prepareStatement(checkSql);
             checkStmt.setString(1, cardNumber);
@@ -179,8 +164,6 @@ public class VoterRegistration extends JFrame {
                 JOptionPane.showMessageDialog(this, "Voter card number already registered", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
-            // Insert new voter
             String insertSql = "INSERT INTO voters (name, email, password, dob, address, voter_card_number) " +
                               "VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement insertStmt = conn.prepareStatement(insertSql);

@@ -16,7 +16,6 @@ public class CandidateDashboard extends JFrame {
     }
     
     private void initUI() {
-        // Create style constants if StyleConstants class is missing
         Color SECONDARY_COLOR = new Color(240, 240, 240);
         Color PRIMARY_COLOR = new Color(0, 102, 204);
         Font SUBTITLE_FONT = new Font("Arial", Font.BOLD, 18);

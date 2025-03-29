@@ -1,7 +1,7 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
+import javax.swing.*;
 
 public class ForgotPassword extends JFrame {
     private JTextField emailField;
@@ -25,23 +25,20 @@ public class ForgotPassword extends JFrame {
         
         JPanel formPanel = new JPanel(new GridLayout(3, 1, 10, 10));
         formPanel.setBackground(StyleConstants.SECONDARY_COLOR);
-        
-        // Email
+
         JPanel emailPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         emailPanel.setBackground(StyleConstants.SECONDARY_COLOR);
         JLabel emailLabel = new JLabel("Email:");
         emailField = new JTextField(20);
         emailPanel.add(emailLabel);
         emailPanel.add(emailField);
-        
-        // Submit Button
+
         JButton submitBtn = new JButton("Reset Password");
         submitBtn.setFont(StyleConstants.BUTTON_FONT);
         submitBtn.setBackground(StyleConstants.PRIMARY_COLOR);
         submitBtn.setForeground(Color.WHITE);
         submitBtn.addActionListener(this::resetPassword);
-        
-        // Back Button
+
         JButton backBtn = new JButton("Back to Login");
         backBtn.addActionListener(e -> {
             new VoterLogin().setVisible(true);
@@ -66,15 +63,12 @@ public class ForgotPassword extends JFrame {
         }
         
         try (Connection conn = DatabaseConnection.getConnection()) {
-            // Check if email exists
             String sql = "SELECT email FROM voters WHERE email = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
             
             if (rs.next()) {
-                // In a real application, you would send a password reset email
-                // Here we'll just show a success message
                 JOptionPane.showMessageDialog(this, 
                     "Password reset instructions sent to your email", 
                     "Success", JOptionPane.INFORMATION_MESSAGE);

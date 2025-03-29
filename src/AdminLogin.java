@@ -27,7 +27,6 @@ public class AdminLogin extends JFrame {
         JPanel formPanel = new JPanel(new GridLayout(3, 1, 10, 20));
         formPanel.setBackground(new Color(240, 240, 240));
         
-        // Username
         JPanel usernamePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         usernamePanel.setBackground(new Color(240, 240, 240));
         JLabel usernameLabel = new JLabel("Username:");
@@ -35,7 +34,6 @@ public class AdminLogin extends JFrame {
         usernamePanel.add(usernameLabel);
         usernamePanel.add(usernameField);
         
-        // Password
         JPanel passwordPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         passwordPanel.setBackground(new Color(240, 240, 240));
         JLabel passwordLabel = new JLabel("Password:");
@@ -43,7 +41,6 @@ public class AdminLogin extends JFrame {
         passwordPanel.add(passwordLabel);
         passwordPanel.add(passwordField);
         
-        // Login Button
         JButton loginBtn = new JButton("Login");
         loginBtn.setFont(new Font("Arial", Font.BOLD, 14));
         loginBtn.setBackground(new Color(0, 102, 204));

@@ -1,7 +1,7 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
+import javax.swing.*;
 
 public class VoterLogin extends JFrame {
     private JTextField emailField;
@@ -27,7 +27,6 @@ public class VoterLogin extends JFrame {
         JPanel formPanel = new JPanel(new GridLayout(5, 1, 10, 10));
         formPanel.setBackground(StyleConstants.SECONDARY_COLOR);
         
-        // Email
         JPanel emailPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         emailPanel.setBackground(StyleConstants.SECONDARY_COLOR);
         JLabel emailLabel = new JLabel("Email:");
@@ -35,7 +34,6 @@ public class VoterLogin extends JFrame {
         emailPanel.add(emailLabel);
         emailPanel.add(emailField);
         
-        // Password
         JPanel passwordPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         passwordPanel.setBackground(StyleConstants.SECONDARY_COLOR);
         JLabel passwordLabel = new JLabel("Password:");
@@ -43,21 +41,18 @@ public class VoterLogin extends JFrame {
         passwordPanel.add(passwordLabel);
         passwordPanel.add(passwordField);
         
-        // Login Button
         JButton loginBtn = new JButton("Login");
         loginBtn.setFont(StyleConstants.BUTTON_FONT);
         loginBtn.setBackground(StyleConstants.PRIMARY_COLOR);
         loginBtn.setForeground(Color.WHITE);
         loginBtn.addActionListener(this::performLogin);
         
-        // Forgot Password
         JButton forgotPasswordBtn = new JButton("Forgot Password?");
         forgotPasswordBtn.setBorderPainted(false);
         forgotPasswordBtn.setContentAreaFilled(false);
         forgotPasswordBtn.setForeground(StyleConstants.PRIMARY_COLOR);
         forgotPasswordBtn.addActionListener(e -> new ForgotPassword().setVisible(true));
         
-        // Register Link
         JPanel registerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         registerPanel.setBackground(StyleConstants.SECONDARY_COLOR);
         JLabel registerLabel = new JLabel("Don't have an account?");

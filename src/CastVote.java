@@ -1,7 +1,7 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
+import javax.swing.*;
 
 public class CastVote extends JFrame {
     private final int voterId;
@@ -29,7 +29,6 @@ public class CastVote extends JFrame {
         JPanel formPanel = new JPanel(new GridLayout(3, 1, 10, 20));
         formPanel.setBackground(StyleConstants.SECONDARY_COLOR);
         
-        // Candidate Selection
         JPanel candidatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         candidatePanel.setBackground(StyleConstants.SECONDARY_COLOR);
         JLabel candidateLabel = new JLabel("Select Candidate:");
@@ -37,15 +36,13 @@ public class CastVote extends JFrame {
         candidateComboBox.setPreferredSize(new Dimension(300, 30));
         candidatePanel.add(candidateLabel);
         candidatePanel.add(candidateComboBox);
-        
-        // Submit Button
+
         JButton submitBtn = new JButton("Submit Vote");
         submitBtn.setFont(StyleConstants.BUTTON_FONT);
         submitBtn.setBackground(StyleConstants.PRIMARY_COLOR);
         submitBtn.setForeground(Color.WHITE);
         submitBtn.addActionListener(this::submitVote);
-        
-        // Back Button
+
         JButton backBtn = new JButton("Back to Dashboard");
         backBtn.addActionListener(e -> {
             new VoterDashboard(voterId, "").setVisible(true);
@@ -85,12 +82,10 @@ public class CastVote extends JFrame {
             JOptionPane.showMessageDialog(this, "Please select a candidate", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
-        // Extract candidate ID from the selection string
+
         int candidateId = Integer.parseInt(selected.split("ID: ")[1]);
         
         try (Connection conn = DatabaseConnection.getConnection()) {
-            // Check if already voted
             String checkSql = "SELECT has_voted FROM voters WHERE voter_id = ?";
             PreparedStatement checkStmt = conn.prepareStatement(checkSql);
             checkStmt.setInt(1, voterId);
@@ -100,15 +95,13 @@ public class CastVote extends JFrame {
                 JOptionPane.showMessageDialog(this, "You have already voted", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
-            // Record the vote
+
             String voteSql = "INSERT INTO votes (voter_id, candidate_id) VALUES (?, ?)";
             PreparedStatement voteStmt = conn.prepareStatement(voteSql);
             voteStmt.setInt(1, voterId);
             voteStmt.setInt(2, candidateId);
             voteStmt.executeUpdate();
-            
-            // Mark voter as voted
+
             String updateSql = "UPDATE voters SET has_voted = true WHERE voter_id = ?";
             PreparedStatement updateStmt = conn.prepareStatement(updateSql);
             updateStmt.setInt(1, voterId);

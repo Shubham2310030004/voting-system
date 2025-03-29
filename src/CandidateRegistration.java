@@ -48,7 +48,6 @@ public class CandidateRegistration extends JFrame {
         String password = new String(passwordField.getPassword());
         String party = partyField.getText().trim();
         
-        // Validation
         if (name.isEmpty() || email.isEmpty() || password.isEmpty() || party.isEmpty()) {
             JOptionPane.showMessageDialog(this,
                 "Please fill all required fields", "Error", JOptionPane.ERROR_MESSAGE);
@@ -56,7 +55,6 @@ public class CandidateRegistration extends JFrame {
         }
         
         try (Connection conn = DatabaseConnection.getConnection()) {
-            // Check if email exists
             String checkSql = "SELECT email FROM candidates WHERE email = ?";
             PreparedStatement checkStmt = conn.prepareStatement(checkSql);
             checkStmt.setString(1, email);
@@ -66,14 +64,13 @@ public class CandidateRegistration extends JFrame {
                     "Email already registered", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
-            // Insert new candidate with plain text password
+
             String insertSql = "INSERT INTO candidates (name, email, password, party) " +
                              "VALUES (?, ?, ?, ?)";
             PreparedStatement insertStmt = conn.prepareStatement(insertSql);
             insertStmt.setString(1, name);
             insertStmt.setString(2, email);
-            insertStmt.setString(3, password); // Storing plain text password
+            insertStmt.setString(3, password);
             insertStmt.setString(4, party);
             
             if (insertStmt.executeUpdate() > 0) {

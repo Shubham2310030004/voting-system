@@ -1,7 +1,7 @@
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class VoterList extends JFrame {
     private JTable voterTable;
@@ -23,15 +23,13 @@ public class VoterList extends JFrame {
         JLabel titleLabel = new JLabel("Voter List", SwingConstants.CENTER);
         titleLabel.setFont(StyleConstants.SUBTITLE_FONT);
         titleLabel.setForeground(StyleConstants.PRIMARY_COLOR);
-        
-        // Table
+
         voterTable = new JTable();
         voterTable.setModel(new DefaultTableModel(
             new Object[]{"ID", "Name", "Email", "Voter Card Number", "Has Voted"}, 0
         ));
         JScrollPane scrollPane = new JScrollPane(voterTable);
-        
-        // Back Button
+
         JButton backBtn = new JButton("Back to Dashboard");
         backBtn.addActionListener(e -> {
             new AdminDashboard().setVisible(true);
@@ -46,7 +44,7 @@ public class VoterList extends JFrame {
     
     private void loadVoters() {
         DefaultTableModel model = (DefaultTableModel) voterTable.getModel();
-        model.setRowCount(0); // Clear existing data
+        model.setRowCount(0);
         
         try (Connection conn = DatabaseConnection.getConnection()) {
             String sql = "SELECT voter_id, name, email, voter_card_number, has_voted FROM voters";

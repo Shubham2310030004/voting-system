@@ -1,7 +1,7 @@
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class CandidateList extends JFrame {
     private JTable candidateTable;
@@ -24,14 +24,12 @@ public class CandidateList extends JFrame {
         titleLabel.setFont(StyleConstants.SUBTITLE_FONT);
         titleLabel.setForeground(StyleConstants.PRIMARY_COLOR);
         
-        // Table
         candidateTable = new JTable();
         candidateTable.setModel(new DefaultTableModel(
             new Object[]{"ID", "Name", "Email", "Party", "Approved"}, 0
         ));
         JScrollPane scrollPane = new JScrollPane(candidateTable);
         
-        // Buttons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         buttonPanel.setBackground(StyleConstants.SECONDARY_COLOR);
         
@@ -94,7 +92,7 @@ public class CandidateList extends JFrame {
             
             JOptionPane.showMessageDialog(this, "Candidate approved successfully", "Success", 
                 JOptionPane.INFORMATION_MESSAGE);
-            loadCandidates(); // Refresh the table
+            loadCandidates(); 
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error approving candidate", "Error", JOptionPane.ERROR_MESSAGE);

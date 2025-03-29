@@ -1,7 +1,7 @@
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class ResultDisplay extends JFrame {
     private JTable resultTable;
@@ -23,15 +23,13 @@ public class ResultDisplay extends JFrame {
         JLabel titleLabel = new JLabel("Election Results", SwingConstants.CENTER);
         titleLabel.setFont(StyleConstants.SUBTITLE_FONT);
         titleLabel.setForeground(StyleConstants.PRIMARY_COLOR);
-        
-        // Table
+
         resultTable = new JTable();
         resultTable.setModel(new DefaultTableModel(
             new Object[]{"Candidate", "Party", "Votes Received"}, 0
         ));
         JScrollPane scrollPane = new JScrollPane(resultTable);
-        
-        // Back Button
+
         JButton backBtn = new JButton("Back");
         backBtn.addActionListener(e -> dispose());
         

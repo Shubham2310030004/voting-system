@@ -27,7 +27,6 @@ public class CandidateLogin extends JFrame {
         JPanel formPanel = new JPanel(new GridLayout(4, 1, 10, 10));
         formPanel.setBackground(new Color(240, 240, 240));
         
-        // Email
         JPanel emailPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         emailPanel.setBackground(new Color(240, 240, 240));
         JLabel emailLabel = new JLabel("Email:");
@@ -35,7 +34,6 @@ public class CandidateLogin extends JFrame {
         emailPanel.add(emailLabel);
         emailPanel.add(emailField);
         
-        // Password
         JPanel passwordPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         passwordPanel.setBackground(new Color(240, 240, 240));
         JLabel passwordLabel = new JLabel("Password:");
@@ -43,14 +41,12 @@ public class CandidateLogin extends JFrame {
         passwordPanel.add(passwordLabel);
         passwordPanel.add(passwordField);
         
-        // Login Button
         JButton loginBtn = new JButton("Login");
         loginBtn.setFont(new Font("Arial", Font.BOLD, 14));
         loginBtn.setBackground(new Color(0, 102, 204));
         loginBtn.setForeground(Color.WHITE);
         loginBtn.addActionListener(this::performLogin);
         
-        // Registration Link
         JButton registerBtn = new JButton("Not registered? Sign up here");
         registerBtn.setBorderPainted(false);
         registerBtn.setContentAreaFilled(false);
