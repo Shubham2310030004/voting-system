@@ -53,7 +53,7 @@ public class CandidateList extends JFrame {
     
     private void loadCandidates() {
         DefaultTableModel model = (DefaultTableModel) candidateTable.getModel();
-        model.setRowCount(0); // Clear existing data
+        model.setRowCount(0); 
         
         try (Connection conn = DatabaseConnection.getConnection()) {
             String sql = "SELECT candidate_id, name, email, party, is_approved FROM candidates";

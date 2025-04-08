@@ -2,19 +2,31 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 import javax.swing.*;
+import java.util.Random;
 
 public class VoterLogin extends JFrame {
     private JTextField emailField;
     private JPasswordField passwordField;
-    
+    private JTextField otpField;
+    private JTextField captchaField;
+    private JLabel captchaLabel;
+    private int generatedOtp;
+    private String generatedCaptcha;
+    private Random random = new Random();
+
     public VoterLogin() {
         setTitle("Voter Login");
-        setSize(400, 350);
+        setSize(400, 450); 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
+        generateCaptcha();
         initUI();
     }
-    
+
+    private void generateCaptcha() {
+        generatedCaptcha = String.format("%04d", random.nextInt(10000));
+    }
+
     private void initUI() {
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -24,7 +36,7 @@ public class VoterLogin extends JFrame {
         titleLabel.setFont(StyleConstants.SUBTITLE_FONT);
         titleLabel.setForeground(StyleConstants.PRIMARY_COLOR);
         
-        JPanel formPanel = new JPanel(new GridLayout(5, 1, 10, 10));
+        JPanel formPanel = new JPanel(new GridLayout(7, 1, 10, 10)); // Increased rows
         formPanel.setBackground(StyleConstants.SECONDARY_COLOR);
         
         JPanel emailPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -40,6 +52,33 @@ public class VoterLogin extends JFrame {
         passwordField = new JPasswordField(20);
         passwordPanel.add(passwordLabel);
         passwordPanel.add(passwordField);
+
+        JPanel otpPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        otpPanel.setBackground(StyleConstants.SECONDARY_COLOR);
+        JLabel otpLabel = new JLabel("OTP:");
+        otpField = new JTextField(6);
+        JButton generateOtpBtn = new JButton("Generate OTP");
+        generateOtpBtn.addActionListener(e -> {
+            generatedOtp = 100000 + random.nextInt(900000); // 6-digit OTP
+            JOptionPane.showMessageDialog(this, "Your OTP is: " + generatedOtp, 
+                "OTP Generated", JOptionPane.INFORMATION_MESSAGE);
+        });
+        otpPanel.add(otpLabel);
+        otpPanel.add(otpField);
+        otpPanel.add(generateOtpBtn);
+
+        JPanel captchaPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        captchaPanel.setBackground(StyleConstants.SECONDARY_COLOR);
+        captchaLabel = new JLabel("CAPTCHA: " + generatedCaptcha);
+        captchaField = new JTextField(6);
+        JButton refreshCaptchaBtn = new JButton("Refresh");
+        refreshCaptchaBtn.addActionListener(e -> {
+            generateCaptcha();
+            captchaLabel.setText("CAPTCHA: " + generatedCaptcha);
+        });
+        captchaPanel.add(captchaLabel);
+        captchaPanel.add(captchaField);
+        captchaPanel.add(refreshCaptchaBtn);
         
         JButton loginBtn = new JButton("Login");
         loginBtn.setFont(StyleConstants.BUTTON_FONT);
@@ -69,6 +108,8 @@ public class VoterLogin extends JFrame {
         
         formPanel.add(emailPanel);
         formPanel.add(passwordPanel);
+        formPanel.add(otpPanel);
+        formPanel.add(captchaPanel);
         formPanel.add(loginBtn);
         formPanel.add(forgotPasswordBtn);
         formPanel.add(registerPanel);
@@ -81,9 +122,23 @@ public class VoterLogin extends JFrame {
     private void performLogin(ActionEvent e) {
         String email = emailField.getText().trim();
         String password = new String(passwordField.getPassword());
+        String otpInput = otpField.getText().trim();
+        String captchaInput = captchaField.getText().trim();
         
-        if (email.isEmpty() || password.isEmpty()) {
+        if (email.isEmpty() || password.isEmpty() || otpInput.isEmpty() || captchaInput.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please fill all fields", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!captchaInput.equals(generatedCaptcha)) {
+            JOptionPane.showMessageDialog(this, "Invalid CAPTCHA", "Error", JOptionPane.ERROR_MESSAGE);
+            generateCaptcha();
+            captchaLabel.setText("CAPTCHA: " + generatedCaptcha);
+            return;
+        }
+
+        if (Integer.parseInt(otpInput) != generatedOtp) {
+            JOptionPane.showMessageDialog(this, "Invalid OTP", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
